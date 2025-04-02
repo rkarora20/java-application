@@ -13,13 +13,18 @@ pipeline {
                 sh 'ls -la'
             }
         }
-        stage('Build') {
-            steps {
-                script {
-                    docker.build("${ECR_REPOSITORY}:${IMAGE_TAG}", '-f /path/to/Dockerfile .')
-                }
-            }
-        }
+    	stage('Build') {
+    	    steps {
+        	echo "*********Build Started**********"
+        	script {
+            	// Corrected path to Dockerfile (no subfolder)
+            	sh """
+            	docker build -t ${ECR_REPOSITORY}:${IMAGE_TAG} -f ./Dockerfile .
+            	"""
+        	}
+    		}
+	}	
+
         stage('Login to ECR') {
             steps {
                 script {
