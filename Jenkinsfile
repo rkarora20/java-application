@@ -17,13 +17,16 @@ pipeline {
     	    steps {
         	echo "*********Build Started**********"
         	script {
-            	// Corrected path to Dockerfile (no subfolder)
-            	sh """
-            	docker build -t ${ECR_REPOSITORY}:${IMAGE_TAG} -f ./Dockerfile .
-            	"""
-        	}
-    		}
-	}	
+                    // Debugging command to print Docker version
+            	    sh "docker --version"
+		    // Enhanced Docker build command with detailed logging
+            	    sh """
+                    set -xe  # Enable debugging and stop on errors
+            	    docker build -t ${ECR_REPOSITORY}:${IMAGE_TAG} -f ./Dockerfile .
+            	    """
+        		}
+    	     	   }
+		}	
 
         stage('Login to ECR') {
             steps {
