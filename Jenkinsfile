@@ -20,8 +20,6 @@ pipeline {
             	sh 'docker build -t ${ECR_REPOSITORY}:${IMAGE_TAG} -f Dockerfile .'
         }
     }
-}
-
 
         stage('Login to ECR') {
             steps {
