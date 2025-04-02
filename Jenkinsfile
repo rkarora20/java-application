@@ -16,12 +16,8 @@ pipeline {
     	stage('Build') {
 	    steps {
         	echo "*********Build Started**********"
-        	script {
-            	// Enhanced Docker build command with detailed logging
-            	sh """
-            	set -xe  # Enable debugging and stop on errors
-            	docker build -t ${ECR_REPOSITORY}:${IMAGE_TAG} -f Dockerfile .
-            	"""
+        	script 
+            	sh 'docker build -t ${ECR_REPOSITORY}:${IMAGE_TAG} -f Dockerfile .'
         }
     }
 }
