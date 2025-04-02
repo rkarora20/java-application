@@ -1,4 +1,4 @@
-pipeline {
+peline {
     agent any
     environment {
         AWS_REGION = 'ca-central-1'
@@ -6,6 +6,7 @@ pipeline {
         ECS_CLUSTER = 'spring-boot-cluster'
         ECS_SERVICE = 'spring-boot-service'
         ECS_TASK_DEFINITION = 'spring-boot-app'
+        IMAGE_TAG = 'latest'  // Define a default image tag
     }
     stages {
         stage('List Workspace Files') {
@@ -13,13 +14,15 @@ pipeline {
                 sh 'ls -la'
             }
         }
-    	stage('Build') {
-	    steps {
-        	echo "*********Build Started**********"
-        	script 
-            	sh 'docker build -t ${ECR_REPOSITORY}:${IMAGE_TAG} -f Dockerfile .'
+        stage('Build') {
+            steps {
+                echo "********* Build Started **********"
+                script {
+                    // Build the Docker image with the correct tag
+                    sh 'docker build -t ${ECR_REPOSITORY}:${IMAGE_TAG} -f Dockerfile .'
+                }
+            }
         }
-    }
 
         stage('Login to ECR') {
             steps {
@@ -34,8 +37,8 @@ pipeline {
             steps {
                 script {
                     sh """
-                        docker tag $ECR_REPOSITORY:latest 209479282299.dkr.ecr.ca-central-1.amazonaws.com/$ECR_REPOSITORY:latest
-                        docker push 209479282299.dkr.ecr.ca-central-1.amazonaws.com/$ECR_REPOSITORY:latest
+                        docker tag $ECR_REPOSITORY:${IMAGE_TAG} 209479282299.dkr.ecr.ca-central-1.amazonaws.com/$ECR_REPOSITORY:${IMAGE_TAG}
+                        docker push 209479282299.dkr.ecr.ca-central-1.amazonaws.com/$ECR_REPOSITORY:${IMAGE_TAG}
                     """
                 }
             }
